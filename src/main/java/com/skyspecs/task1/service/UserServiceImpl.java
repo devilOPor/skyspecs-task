@@ -10,6 +10,7 @@ import com.skyspecs.task1.repository.CustomUserRepository;
 import com.skyspecs.task1.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -151,16 +152,17 @@ public class UserServiceImpl implements UserService{
         Role role = roleService.findByRole(roleName);
         user.getRoles().add(role);
         role.getUsers().add(user);
+
     }
-    public List<UserDto> fetchWithFilters(List<String> firstNameFilter, List<String> emailFilter, Pageable pageable){
-        if(firstNameFilter!=null && emailFilter!=null) {
-            System.out.println(firstNameFilter);
-            System.out.println(emailFilter);
-            return userEntityToDto(customUserRepository.findByFirstNameAndEmail(emailFilter,firstNameFilter));
+    public List<UserDto> fetchWithFilters(List<String> emailFilter,List<String> firstNameFilter,  Pageable pageable){
+        if(firstNameFilter!=null || emailFilter!=null) {
+            List<User> users = customUserRepository
+                    .findByFirstNameAndEmail(emailFilter,firstNameFilter,pageable).getContent();
+            return userEntityToDto(users);
         } else if (firstNameFilter!=null) {
-            return userEntityToDto(customUserRepository.findByFirstNameFilters(firstNameFilter));
+            return userEntityToDto(customUserRepository.findByFirstNameFilters(firstNameFilter,pageable));
         } else if (emailFilter!=null) {
-            return userEntityToDto(customUserRepository.findByEmailFilters(emailFilter));
+            return userEntityToDto(customUserRepository.findByEmailFilters(emailFilter,pageable));
         }
         return getUserList(pageable);
     }

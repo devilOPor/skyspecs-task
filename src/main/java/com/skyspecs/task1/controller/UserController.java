@@ -37,13 +37,14 @@ public class UserController {
     @GetMapping("/page={page}")
     public ResponseEntity getAllUsers(@PathVariable(required = false) Integer page,
                                       @RequestParam(required = false) String sort,
-                                      @RequestParam(required = false) String sortBy,
+                                      @RequestParam(required = false,defaultValue = "email") String sortBy,
                                       @RequestParam(required = false) List<String> nameFilter,
                                       @RequestParam(required = false) List<String> emailFilter){
 
-        Pageable pageable =  PageRequest.of(page,15, Sort.Direction.DESC,sortBy);
-        if(sort!=null && (sort.toLowerCase()!="desc" || sort.toLowerCase()!="descending" )){
-            pageable = PageRequest.of(page,15, Sort.Direction.ASC,sortBy);
+
+        Pageable pageable =  PageRequest.of(page,6, Sort.Direction.ASC,sortBy);
+        if(sort!=null && (sort.toLowerCase().equals("desc") || sort.toLowerCase().equals("descending" ))){
+            pageable = PageRequest.of(page,6, Sort.Direction.DESC,sortBy);
         }
 
         return new ResponseEntity<>(userService.fetchWithFilters(nameFilter,emailFilter,pageable),HttpStatus.OK);

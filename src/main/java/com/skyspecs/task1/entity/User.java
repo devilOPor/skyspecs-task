@@ -16,14 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity(name="users")
-@FilterDef(name="userFilter", parameters={
-        @ParamDef( name="withFirstName", type="String" ),
-        @ParamDef( name="withEmail", type="String" )
-})
-@Filters( {
-        @Filter(name="userFilter", condition=":withFistName == firstName"),
-        @Filter(name="userFilter", condition=":withEmail == email")
-} )
 public class User {
 
     @Id

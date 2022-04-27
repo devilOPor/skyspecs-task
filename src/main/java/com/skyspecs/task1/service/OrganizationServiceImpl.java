@@ -2,10 +2,8 @@ package com.skyspecs.task1.service;
 
 import com.skyspecs.task1.dto.OrganizationAddressForm;
 import com.skyspecs.task1.dto.OrganizationDto;
-import com.skyspecs.task1.dto.UserDto;
 import com.skyspecs.task1.entity.Address;
 import com.skyspecs.task1.entity.Organization;
-import com.skyspecs.task1.entity.User;
 import com.skyspecs.task1.repository.OrganizationRepository;
 import com.skyspecs.task1.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -107,5 +105,4 @@ public class OrganizationServiceImpl implements OrganizationService {
         }
         return organizationDtos;
     }
-
 }
