@@ -23,27 +23,25 @@ public class CustomUserRepositoryImpl implements CustomUserRepository{
     EntityManager entityManager;
 
     public Page<User> findByFirstNameAndEmail(List<String> firstName, List<String> email, Pageable pageable) {
-        System.out.println("users filter email name");
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<User> criteriaQuery = criteriaBuilder.createQuery(User.class);
         Root<User> root = criteriaQuery.from(User.class);
         Predicate firstNamePredicate  = criteriaBuilder.and(root.get("firstName").in(firstName));
         Predicate emailPredicate =  criteriaBuilder.and(root.get("email").in(email));
+
         criteriaQuery.where(criteriaBuilder.and(firstNamePredicate, emailPredicate));
-        TypedQuery<User> query = entityManager.createQuery(criteriaQuery);
-        List<User> users =  query.getResultList();
-        System.out.println(users);
-        for(User user:users){
-            System.out.println(user.getId()+" "+user.getEmail()+" "+ user.getFirstName());
+        String sort = pageable.getSort().toString();
+        int colonIndex = sort.indexOf(':');
+        String sortBy = sort.substring(0,colonIndex);
+        System.out.println(sortBy);
+        TypedQuery<User> query = entityManager.createQuery(criteriaQuery.orderBy(criteriaBuilder.desc(root.get(sortBy))));
+        if(sort.contains("ASC")) {
+            query = entityManager.createQuery(criteriaQuery.orderBy(criteriaBuilder.asc(root.get(sortBy))));
         }
-
-        System.out.println(pageable.toString());
-
-
+        List<User> users =  query.getResultList();
         if(users!=null ) {
             final Page<User> usersOnPage = new PageImpl<>(users, pageable, (long)users.size());
             return usersOnPage;
-
         }
         else
         {

@@ -43,7 +43,7 @@ public class OrganizationController {
     }
 
     @PutMapping("/edit/{id}")
-    public ResponseEntity editOrganization(@PathVariable int id, @RequestBody OrganizationAddressForm form){
+    public ResponseEntity editOrganization(@PathVariable int id,@Valid @RequestBody OrganizationAddressForm form){
         return new ResponseEntity(organizationService.updateOrganization(id, form),HttpStatus.OK);
     }
 
