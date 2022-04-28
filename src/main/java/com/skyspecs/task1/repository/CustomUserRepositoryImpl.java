@@ -50,21 +50,54 @@ public class CustomUserRepositoryImpl implements CustomUserRepository{
         return null;
     }
 
-    public List<User> findByFirstNameFilters(List<String> firstNamefilter, Pageable pageable) {
+    public Page<User> findByFirstNameFilters(List<String> firstNamefilter, Pageable pageable) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<User> criteriaQuery = criteriaBuilder.createQuery(User.class);
         Root<User> root = criteriaQuery.from(User.class);
         criteriaQuery.where(root.get("firstName").in(firstNamefilter));
-        TypedQuery<User> query = entityManager.createQuery(criteriaQuery);
-        return query.getResultList();
+
+        String sort = pageable.getSort().toString();
+        int colonIndex = sort.indexOf(':');
+        String sortBy = sort.substring(0,colonIndex);
+        System.out.println(sortBy);
+        TypedQuery<User> query = entityManager.createQuery(criteriaQuery.orderBy(criteriaBuilder.desc(root.get(sortBy))));
+        if(sort.contains("ASC")) {
+            query = entityManager.createQuery(criteriaQuery.orderBy(criteriaBuilder.asc(root.get(sortBy))));
+        }
+        List<User> users =  query.getResultList();
+        if(users!=null ) {
+            final Page<User> usersOnPage = new PageImpl<>(users, pageable, (long)users.size());
+            return usersOnPage;
+        }
+        else
+        {
+            System.out.println("users is null");
+        }
+        return null;
     }
 
-    public List<User> findByEmailFilters(List<String> emailFilters, Pageable pageable) {
+    public Page<User> findByEmailFilters(List<String> emailFilters, Pageable pageable) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<User> criteriaQuery = criteriaBuilder.createQuery(User.class);
         Root<User> root = criteriaQuery.from(User.class);
         criteriaQuery.where(root.get("email").in(emailFilters));
-        TypedQuery<User> query = entityManager.createQuery(criteriaQuery);
-        return query.getResultList();
+        String sort = pageable.getSort().toString();
+        int colonIndex = sort.indexOf(':');
+        String sortBy = sort.substring(0,colonIndex);
+        System.out.println(sortBy);
+        TypedQuery<User> query = entityManager.createQuery(criteriaQuery.orderBy(criteriaBuilder.desc(root.get(sortBy))));
+        if(sort.contains("ASC")) {
+            query = entityManager.createQuery(criteriaQuery.orderBy(criteriaBuilder.asc(root.get(sortBy))));
+        }
+        List<User> users =  query.getResultList();
+        if(users!=null ) {
+            final Page<User> usersOnPage = new PageImpl<>(users, pageable, (long)users.size());
+            return usersOnPage;
+        }
+        else
+        {
+            System.out.println("users is null");
+        }
+        return null;
     }
 }

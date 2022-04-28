@@ -36,7 +36,7 @@ public class UserController {
 
     @GetMapping("/page={page}")
     public ResponseEntity getAllUsers(@PathVariable(required = false) Integer page,
-                                      @RequestParam(required = false) String sort,
+                                      @RequestParam(required = false, defaultValue = "ASC") String sort,
                                       @RequestParam(required = false,defaultValue = "email") String sortBy,
                                       @RequestParam(required = false) List<String> nameFilter,
                                       @RequestParam(required = false) List<String> emailFilter){

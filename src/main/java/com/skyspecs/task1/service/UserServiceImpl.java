@@ -160,9 +160,11 @@ public class UserServiceImpl implements UserService{
                     .findByFirstNameAndEmail(emailFilter,firstNameFilter,pageable).getContent();
             return userEntityToDto(users);
         } else if (firstNameFilter!=null) {
-            return userEntityToDto(customUserRepository.findByFirstNameFilters(firstNameFilter,pageable));
+            List<User> users = customUserRepository.findByFirstNameFilters(firstNameFilter,pageable).getContent();
+            return userEntityToDto(users);
         } else if (emailFilter!=null) {
-            return userEntityToDto(customUserRepository.findByEmailFilters(emailFilter,pageable));
+            List<User> users = customUserRepository.findByEmailFilters(emailFilter,pageable).getContent();
+            return userEntityToDto(users);
         }
         return getUserList(pageable);
     }

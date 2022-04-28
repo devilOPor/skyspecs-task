@@ -10,6 +10,6 @@ import java.util.List;
 
 public interface CustomUserRepository{
     Page<User> findByFirstNameAndEmail(List<String> firstName, List<String> email, Pageable pageable);
-    List<User> findByFirstNameFilters(List<String> firstNamefilter, Pageable pageable);
-    List<User> findByEmailFilters(List<String> emailFilters, Pageable pageable);
+    Page<User> findByFirstNameFilters(List<String> firstNamefilter, Pageable pageable);
+    Page<User> findByEmailFilters(List<String> emailFilters, Pageable pageable);
 }
