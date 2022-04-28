@@ -155,7 +155,7 @@ public class UserServiceImpl implements UserService{
 
     }
     public List<UserDto> fetchWithFilters(List<String> emailFilter,List<String> firstNameFilter,  Pageable pageable){
-        if(firstNameFilter!=null || emailFilter!=null) {
+        if(firstNameFilter!=null && emailFilter!=null) {
             List<User> users = customUserRepository
                     .findByFirstNameAndEmail(emailFilter,firstNameFilter,pageable).getContent();
             return userEntityToDto(users);
